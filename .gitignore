@@ -20,7 +20,3 @@ staticfiles/
 .vscode/
 .idea/
 .DS_Store
-
-# Otros
-nuevo_proyecto/
-backup.json
