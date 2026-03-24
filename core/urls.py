@@ -9,7 +9,7 @@ sitemaps = {'posts': PostSitemap}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('apps.blog.urls'), name='blog'),
+    path('', include('apps.blog.urls'), name='blog'),
     path('sitemap.xml',
         sitemap,
         {'sitemaps': sitemaps},
