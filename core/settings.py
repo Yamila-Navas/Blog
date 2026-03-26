@@ -100,13 +100,51 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 # ── Seguridad para producción ─────────────
 if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    USE_X_FORWARDED_HOST = True
-    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', cast=bool)
-    SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', cast=bool)
-    CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', cast=bool)
-    SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=63072000, cast=int)
+
+    # Protección básica contra ataques XSS en el navegador
+    SECURE_BROWSER_XSS_FILTER = config('SECURE_BROWSER_XSS_FILTER', cast=bool)
+
+    # Evita que el navegador adivine tipos de archivos (seguridad)
+    SECURE_CONTENT_TYPE_NOSNIFF = config('SECURE_CONTENT_TYPE_NOSNIFF', cast=bool)
+
+    # Bloquea que el sitio se cargue en iframes (anti clickjacking)
+    X_FRAME_OPTIONS = config('X_FRAME_OPTIONS')
+
+    # Fuerza HTTPS por X segundos (HSTS)
+    SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', cast=int)
+
+    # Aplica HSTS también a subdominios
     SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', cast=bool)
+
+    # Permite incluir el dominio en listas HSTS de navegadores
+    SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', cast=bool)
+
+    # Indica a Django que está detrás de un proxy (ej: Nginx con HTTPS)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    # Usa el host enviado por el proxy
+    USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', cast=bool)
+
+    # Redirige todo el tráfico a HTTPS
+    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', cast=bool)
+
+    # Cookies de sesión solo por HTTPS
+    SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', cast=bool)
+
+    # Cookie CSRF solo por HTTPS
+    CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', cast=bool)
+
+    # Dominios permitidos para CORS (frontend que consume tu API)
+    CORS_ALLOWED_ORIGINS = config(
+        "CORS_ALLOWED_ORIGINS",
+        cast=lambda v: [s.strip() for s in v.split(",")]
+    )
+
+    # Dominios confiables para protección CSRF
+    CSRF_TRUSTED_ORIGINS = config(
+        "CSRF_TRUSTED_ORIGINS",
+        cast=lambda v: [s.strip() for s in v.split(",")]
+    )
 
 
 
