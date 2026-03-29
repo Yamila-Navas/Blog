@@ -1,12 +1,12 @@
 {% extends "blog/base.html" %}
 {% load blog_tags %}
-{% block title %}Search{% endblock %}
+{% block title %}Buscar{% endblock %}
 {% block content %}
 {% if query %}
-<h1>Posts containing "{{ query }}"</h1>
+<h1>Publicaciones que contienen "{{ query }}"</h1>
 <h3>
     {% with results.count as total_results %}
-    Found {{ total_results }} result{{ total_results|pluralize }}
+    Se encontraron {{ total_results }} resultado{{ total_results|pluralize:"s" }}
     {% endwith %}
 </h3>
 {% for post in results %}
@@ -18,14 +18,14 @@
 {{ post.body|markdown|truncatewords_html:12 }}
 <hr class="mi-linea">
 {% empty %}
-<p>There are no results for your query.</p>
+<p>No hay resultados para tu búsqueda.</p>
 {% endfor %}
-<p><a href="{% url "blog:post_list" %}">back to homepage</a></p>
+<p><a href="{% url "blog:post_list" %}">volver a la página principal</a></p>
 {% else %}
-<h1>Search for posts</h1>
+<h1>Buscar publicaciones</h1>
 <form method="get">
     {{ form.as_p }}
-    <input type="submit" value="Search">
+    <input type="submit" value="Buscar">
 </form>
 {% endif %}
 {% endblock %}
